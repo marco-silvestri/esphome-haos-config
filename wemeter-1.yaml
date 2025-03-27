@@ -1,0 +1,54 @@
+esphome:
+  name: wemeter-ldr-1a
+  friendly_name: WeMeterLDR 1a
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: ":)"
+
+ota:
+  - platform: esphome
+    password: ":)"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip: 
+    static_ip: 192.168.1.158
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Wemeter-1 Fallback Hotspot"
+    password: ":)"
+
+captive_portal:
+
+sensor:
+  - platform: pulse_meter
+    name: 'Power'
+    id: sensor_pulse_meter # Optional ID, necessary if you want to calculate the total daily energy
+    unit_of_measurement: 'W'
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+    pin: GPIO04
+    filters:
+      - multiply: 60 # (60s / impulse constant) * (1000W / 1kW)
+    internal_filter: 600ms
+    total:
+      name: "Electricity Total"
+      unit_of_measurement: "kWh"
+      device_class: energy
+      state_class: total_increasing
+      accuracy_decimals: 3
+      filters:
+        - multiply: 0.001  # (1/1000 pulses per kWh)
