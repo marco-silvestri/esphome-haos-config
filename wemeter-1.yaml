@@ -39,16 +39,16 @@ sensor:
     unit_of_measurement: 'W'
     device_class: power
     state_class: measurement
-    accuracy_decimals: 0
+    accuracy_decimals: 4
     pin: GPIO04
     filters:
       - multiply: 60 # (60s / impulse constant) * (1000W / 1kW)
-    internal_filter: 600ms
+    internal_filter: 400ms
     total:
       name: "Electricity Total"
       unit_of_measurement: "kWh"
       device_class: energy
       state_class: total_increasing
-      accuracy_decimals: 3
+      accuracy_decimals: 4
       filters:
-        - multiply: 0.001  # (1/1000 pulses per kWh)
+        - multiply: 0.01  # (1/1000 pulses per kWh)
